@@ -44,13 +44,19 @@ em{font-style:normal;color:var(--gold)}
 #s1 p{color:var(--mute);font-size:16px;margin:8px 0 26px}
 #s1 .btn{min-width:210px}
 
+.stage{opacity:0;transform:translateY(16px);filter:blur(8px);transition:opacity .7s var(--ease),transform .9s var(--ease),filter .9s var(--ease)}
+.stage.in{opacity:1;transform:none;filter:none}
+#hint{position:absolute;left:0;right:0;bottom:max(64px,env(safe-area-inset-bottom));color:var(--gold-hi);font-weight:700;font-size:17px;animation:breathe 1.8s ease-in-out infinite;transition:opacity .4s}
+#hint::before{content:"";display:block;width:54px;height:54px;margin:0 auto 12px;border-radius:50%;box-shadow:inset 0 0 0 1px var(--gold),0 0 0 10px rgba(217,180,92,.08)}
+@keyframes breathe{50%{opacity:.45;transform:scale(.97)}}
+#s1.live #hint{opacity:0;pointer-events:none}
+#s1:not(.live){cursor:pointer}
+
 /* 2 · not a question */
 #s2 .lead{font-size:17px;color:var(--mute);font-weight:700;margin-bottom:10px}
 #s2 h2{font-size:clamp(34px,10.4vw,56px);max-width:9.5em}
-#arena{position:relative;width:min(100%,420px);height:236px;margin-top:26px}
-#yes{position:absolute;right:50%;top:14px;transform:translateX(50%);min-width:200px;font-size:19px}
-#yes:hover{transform:translateX(50%) translateY(-2px)}
-#no{position:absolute;left:50%;top:132px;transform:translateX(-50%);transition:left .32s var(--ease),top .32s var(--ease),transform .32s var(--ease)}
+#arena{position:relative;width:min(100%,420px);height:250px;margin-top:22px}
+#no{position:absolute;left:50%;top:92px;min-width:190px;font-size:18px;transform:translateX(-50%);transition:left .32s var(--ease),top .32s var(--ease),transform .32s var(--ease)}
 #quip{min-height:2em;color:var(--gold-hi);font-size:17px;font-weight:700;margin-top:4px}
 #stamp{position:fixed;inset:0;z-index:5;display:grid;place-items:center;pointer-events:none;visibility:hidden}
 #stamp b{font-weight:900;font-size:clamp(46px,15vw,84px);color:var(--gold);padding:.05em .42em;border:5px solid var(--gold);border-radius:10px;transform:rotate(-9deg) scale(3.2);opacity:0;background:rgba(7,7,8,.82)}
@@ -81,26 +87,28 @@ body.shake main{animation:shake .35s linear}
 #s4 .from{color:var(--mute);font-size:15px}
 #s4 .row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:12px}
 #s4 .btn{font-size:15px;padding:12px 22px;min-height:48px}
-@media (prefers-reduced-motion:reduce){#no{transition:none}.on .card{animation:none;clip-path:none}body.shake main{animation:none}#stamp.hit b{animation:none;transform:rotate(-9deg);opacity:1}}
+@media (prefers-reduced-motion:reduce){.stage{transition:opacity .3s;transform:none;filter:none}#hint{animation:none}#no{transition:none}.on .card{animation:none;clip-path:none}body.shake main{animation:none}#stamp.hit b{animation:none;transform:rotate(-9deg);opacity:1}}
 </style>
 </head>
 <body>
 <canvas id="dust" aria-hidden="true"></canvas>
 <div id="stamp" aria-hidden="true"><b>تأیید شد</b></div>
 
+<audio id="a1" src="intro.mp3" preload="auto"></audio>
+<audio id="a2" src="declare.mp3" preload="auto"></audio>
 <main>
 <section class="screen on" id="s1">
   <video src="five.mp4" poster="five.jpg" muted autoplay loop playsinline aria-hidden="true"></video>
-  <h1>دکتر مارال.<br><em>پنج سال</em> گذشت.</h1>
-  <p>این کارت تبریک فقط برای توست.</p>
-  <button class="btn" id="open">بازش کن</button>
+  <h1><span class="stage" data-at="1.3" style="display:block">دکتر مارال.</span><span class="stage" data-at="2.75" style="display:block"><em>پنج سال</em> گذشت.</span></h1>
+  <p class="stage" data-at="4.3">این کارت تبریک فقط برای توست.</p>
+  <button class="btn stage" id="open" data-at="7.6" disabled>بازش کن</button>
+  <div id="hint">برای شروع، لمس کن</div>
 </section>
 
 <section class="screen" id="s2">
-  <div class="lead">سؤال نمی‌پرسم. اعلام می‌کنم:</div>
-  <h2>خفن‌ترین دندان‌پزشک این شهر <em>تویی.</em></h2>
-  <div id="arena">
-    <button class="btn" id="yes">قبول</button>
+  <div class="lead stage" data-at="0.25">سؤال نمی‌پرسم. اعلام می‌کنم:</div>
+  <h2 class="stage" data-at="2.95">خفن‌ترین دندان‌پزشک این شهر <em>تویی.</em></h2>
+  <div id="arena" class="stage" data-at="6.3">
     <button class="btn ghost" id="no">اعتراض دارم</button>
   </div>
   <div id="quip" aria-live="polite"></div>
@@ -146,30 +154,36 @@ const burst=()=>{if(calm)return;for(let i=0;i<170;i++){const a=Math.random()*6.2
   for(const b of bits){b.vy+=.34*D;b.vx*=.985;b.x+=b.vx;b.y+=b.vy;b.r+=b.vr;b.l-=.008;cx.save();cx.translate(b.x,b.y);cx.rotate(b.r);cx.globalAlpha=Math.max(0,b.l);cx.fillStyle=b.c;cx.fillRect(-b.w/2,-b.w/4,b.w,b.w/2);cx.restore();}
   requestAnimationFrame(tick);})(0);
 
-$('#open').onclick=()=>go('s2');
+// Amir speaks the opening lines; each line appears as he says it
+const a1=$('#a1'),a2=$('#a2');
+const stage=(scr,audio)=>{audio.currentTime=0;const p=audio.play();const run=()=>scr.querySelectorAll('.stage').forEach(el=>setTimeout(()=>{el.classList.add('in');el.disabled=false;},(calm?0.2:1)*1000*+el.dataset.at));
+  p&&p.catch?p.then(run,run):run();};
+const s1=$('#s1');
+const begin=()=>{if(s1.classList.contains('live'))return;s1.classList.add('live');stage(s1,a1);};
+s1.addEventListener('pointerdown',begin);s1.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')begin();});s1.tabIndex=0;
+$('#open').onclick=()=>{a1.pause();go('s2');stage($('#s2'),a2);};
 
 // «اعتراض دارم» is decoration: it never lets itself be pressed
-const no=$('#no'),yes=$('#yes'),arena=$('#arena'),quip=$('#quip');
-const lines=['اعتراض وارد نیست.','این دکمه دکور است.','نظر نخواستم. تأیید خواستم.','این تصمیم قبلاً گرفته شده.','رئیس این صفحه منم.','دکمه‌ی طلایی منتظر است.'];
+const no=$('#no'),arena=$('#arena'),quip=$('#quip');
+const lines=['اعتراض وارد نیست.','این دکمه دکور است.','نظر نخواستم. تأیید خواستم.','این تصمیم قبلاً گرفته شده.','رئیس این صفحه منم.','راه دیگری نیست.'];
 const EV=['pointerenter','pointerdown','touchstart','focus'];let n=0,done=false;
 const dodge=e=>{e&&e.preventDefault();if(done)return;
-  if(n>=lines.length){no.textContent='قبول، تسلیمم';no.classList.remove('ghost');no.onclick=accept;no.style.left='50%';no.style.top='132px';no.style.transform='translateX(-50%)';
+  if(n>=lines.length){no.textContent='قبول، تسلیمم';no.classList.remove('ghost');no.onclick=accept;no.style.left='50%';no.style.top='92px';no.style.transform='translateX(-50%)';
     quip.textContent='بالاخره.';EV.forEach(k=>no.removeEventListener(k,dodge));return;}
-  const a=arena.getBoundingClientRect(),b=no.getBoundingClientRect(),y=yes.getBoundingClientRect();let x,t,k=0;
+  const a=arena.getBoundingClientRect(),b=no.getBoundingClientRect();let x,t,k=0;
   do{x=Math.random()*(a.width-b.width);t=Math.random()*(a.height-b.height);k++;}
-  while(k<40&&((t<y.bottom-a.top+14&&x+b.width>y.left-a.left-14&&x<y.right-a.left+14)||Math.hypot(x-(b.left-a.left),t-(b.top-a.top))<90));
+  while(k<40&&Math.hypot(x-(b.left-a.left),t-(b.top-a.top))<110);
   no.style.left=x+'px';no.style.top=t+'px';no.style.transform=`rotate(${(Math.random()*16-8).toFixed(1)}deg) scale(${Math.max(.74,1-n*.045)})`;
   quip.textContent=lines[n++];navigator.vibrate&&navigator.vibrate(18);};
 EV.forEach(k=>no.addEventListener(k,dodge,{passive:false}));
 no.onclick=e=>e.preventDefault();
-function accept(){if(done)return;done=true;const s=$('#stamp');s.classList.add('hit');navigator.vibrate&&navigator.vibrate([30,40,60]);
+function accept(){if(done)return;done=true;a2.pause();const s=$('#stamp');s.classList.add('hit');navigator.vibrate&&navigator.vibrate([30,40,60]);
   setTimeout(()=>{document.body.classList.add('shake');burst();},calm?0:270);
   setTimeout(()=>{s.classList.remove('hit');document.body.classList.remove('shake');go('s3');},calm?700:1350);}
-yes.onclick=accept;
 
 // the gift
 const gv=$('#giftv');
-$('#gift').onclick=()=>{burst();go('s4');gv.play().catch(()=>{});};
+$('#gift').onclick=()=>{a1.pause();a2.pause();burst();go('s4');gv.play().catch(()=>{});};
 fetch('luxe.mp4',{method:'HEAD'}).then(r=>{if(!r.ok)return;const o=$('#other');o.hidden=false;let two=false;
   o.onclick=()=>{two=!two;gv.src=two?'luxe.mp4':'gift.mp4';$('#save').href=gv.src;o.textContent=two?'فیلم اول را ببین':'فیلم دوم را ببین';gv.play().catch(()=>{});};}).catch(()=>{});
 </script>
