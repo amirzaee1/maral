@@ -87,7 +87,9 @@ body.shake main{animation:shake .35s linear}
   box-shadow:0 40px 80px -30px #000,0 0 0 1px var(--line)}
 .frame video{width:100%;height:100%;display:block;object-fit:cover}
 #s4 .from{color:var(--mute);font-size:15px}
-#s4 .row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:12px}
+#s4{justify-content:flex-start}
+.film{display:flex;flex-direction:column;align-items:center;margin-bottom:28px}
+.film .frame{margin-bottom:12px}
 #s4 .btn{font-size:15px;padding:12px 16px;min-height:48px}
 #films .btn.on{background:var(--gold);color:#120d02;box-shadow:none}
 @media (prefers-reduced-motion:reduce){.stage{transition:opacity .3s;transform:none;filter:none}#hint{animation:none}#no{transition:none}.on .card{animation:none;clip-path:none}body.shake main{animation:none}#stamp.hit b{animation:none;transform:rotate(-9deg);opacity:1}}
@@ -135,14 +137,15 @@ body.shake main{animation:shake .35s linear}
 
 <section class="screen" id="s4">
   <h2>اینم کادوی من، برای <em>پنج‌سالگی‌ات.</em></h2>
-  <div class="frame"><video id="giftv" src="light.mp4" poster="five.jpg" playsinline controls preload="metadata"></video></div>
-  <div class="from">از طرف امیر.</div>
-  <div class="row" id="films">
-    <button class="btn ghost" data-f="light.mp4">نور</button>
-    <button class="btn ghost" data-f="gift.mp4">پنج سال</button>
-    <button class="btn ghost" data-f="luxe.mp4">طلایی</button>
-    <a class="btn ghost" id="save" href="light.mp4" download="five-years.mp4" aria-label="ذخیره‌ی فیلم">ذخیره</a>
+  <div class="film">
+    <div class="frame"><video id="v1" src="light.mp4" poster="five.jpg" playsinline controls preload="metadata"></video></div>
+    <a class="btn ghost" href="light.mp4" download="maral-5.mp4">دانلود</a>
   </div>
+  <div class="film">
+    <div class="frame"><video id="v2" src="gift.mp4" poster="maral.jpg" playsinline controls preload="metadata"></video></div>
+    <a class="btn ghost" href="gift.mp4" download="five-years-of-smiles.mp4">دانلود</a>
+  </div>
+  <div class="from">از طرف امیر.</div>
 </section>
 </main>
 
@@ -191,12 +194,11 @@ function accept(){if(done)return;done=true;a2.pause();const s=$('#stamp');s.clas
   setTimeout(()=>{document.body.classList.add('shake');burst();},calm?0:270);
   setTimeout(()=>{s.classList.remove('hit');document.body.classList.remove('shake');go('s3');},calm?700:1350);}
 
-// the gift: three films, one after another (light, the reel, the gold one)
-const gv=$('#giftv'),fb=[...document.querySelectorAll('#films button')];
-const show=f=>{gv.src=f;$('#save').href=f;fb.forEach(b=>b.classList.toggle('on',b.dataset.f===f));gv.play().catch(()=>{});};
-fb.forEach(b=>b.onclick=()=>show(b.dataset.f));
-gv.onended=()=>{const i=fb.findIndex(b=>b.classList.contains('on'));if(i>=0&&i<fb.length-1)show(fb[i+1].dataset.f);};
-$('#gift').onclick=()=>{a1.pause();a2.pause();burst();go('s4');show('light.mp4');};
+// the gift: the five-years film, then straight into the reel
+const v1=$('#v1'),v2=$('#v2');
+v1.onplay=()=>v2.pause();v2.onplay=()=>v1.pause();
+v1.onended=()=>{v2.scrollIntoView({behavior:calm?'auto':'smooth',block:'center'});v2.play().catch(()=>{});};
+$('#gift').onclick=()=>{a1.pause();a2.pause();burst();go('s4');v1.play().catch(()=>{});};
 </script>
 </body>
 </html>
