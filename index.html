@@ -87,9 +87,11 @@ body.shake main{animation:shake .35s linear}
   box-shadow:0 40px 80px -30px #000,0 0 0 1px var(--line)}
 .frame video{width:100%;height:100%;display:block;object-fit:cover}
 #s4 .from{color:var(--mute);font-size:15px}
-#s4{justify-content:flex-start}
-.film{display:flex;flex-direction:column;align-items:center;margin-bottom:28px}
-.film .frame{margin-bottom:12px}
+.glass{display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:8px 22px;border-radius:999px;font:700 13px Vazir,sans-serif;color:var(--ink);text-decoration:none;
+  background:rgba(255,255,255,.08);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);box-shadow:inset 0 0 0 1px rgba(255,255,255,.24),inset 0 1px 0 rgba(255,255,255,.3),0 10px 24px -12px #000;margin-bottom:12px;transition:transform .2s var(--ease),background .2s}
+.glass:hover{background:rgba(255,255,255,.16);transform:translateY(-1px)}
+.glass:active{transform:scale(.97)}
+.glass:focus-visible{outline:2px solid var(--gold-hi);outline-offset:4px}
 #s4 .btn{font-size:15px;padding:12px 16px;min-height:48px}
 #films .btn.on{background:var(--gold);color:#120d02;box-shadow:none}
 @media (prefers-reduced-motion:reduce){.stage{transition:opacity .3s;transform:none;filter:none}#hint{animation:none}#no{transition:none}.on .card{animation:none;clip-path:none}body.shake main{animation:none}#stamp.hit b{animation:none;transform:rotate(-9deg);opacity:1}}
@@ -110,8 +112,9 @@ body.shake main{animation:shake .35s linear}
   <p class="say stage" data-at="8.72">دو تا جلسه داشتم، نرسیدم.</p>
   <p class="say stage" data-at="11.16">گل هم که امشب اونجا زیاده.</p>
   <p class="say stage" data-at="13.16">شیرینی هم که برای دکترا قدغنه.</p>
-  <p class="say gold stage" data-at="15.72">پس جای خودم، اینو فرستادم.</p>
-  <button class="btn stage" id="open" data-at="18.2" disabled>ببینم</button>
+  <p class="say stage" data-at="15.72">پس جای خودم، اینو فرستادم.</p>
+  <p class="say gold stage" data-at="18.4">یه شام طلبت.</p>
+  <button class="btn stage" id="open" data-at="20.4" disabled>ببینم</button>
   <div id="hint">لمس کن</div>
 </section>
 
@@ -137,14 +140,8 @@ body.shake main{animation:shake .35s linear}
 
 <section class="screen" id="s4">
   <h2>اینم کادوی من، برای <em>پنج‌سالگی‌ات.</em></h2>
-  <div class="film">
-    <div class="frame"><video id="v1" src="light.mp4" poster="five.jpg" playsinline controls preload="metadata"></video></div>
-    <a class="btn ghost" href="light.mp4" download="maral-5.mp4">دانلود</a>
-  </div>
-  <div class="film">
-    <div class="frame"><video id="v2" src="gift.mp4" poster="maral.jpg" playsinline controls preload="metadata"></video></div>
-    <a class="btn ghost" href="gift.mp4" download="five-years-of-smiles.mp4">دانلود</a>
-  </div>
+  <div class="frame"><video id="v1" src="light.mp4" poster="five.jpg" playsinline controls preload="metadata"></video></div>
+  <a class="glass" href="both.mp4" download="maral-five-years.mp4">دانلود</a>
   <div class="from">از طرف امیر.</div>
 </section>
 </main>
@@ -197,11 +194,12 @@ function accept(){if(done)return;done=true;a2.pause();sfx('stamp',1);const s=$('
   setTimeout(()=>{document.body.classList.add('shake');burst();},calm?0:270);
   setTimeout(()=>{s.classList.remove('hit');document.body.classList.remove('shake');go('s3');},calm?700:1350);}
 
-// the gift: the five-years film, then straight into the reel
-const v1=$('#v1'),v2=$('#v2');
-v1.onplay=()=>v2.pause();v2.onplay=()=>v1.pause();
-v1.onended=()=>{v2.scrollIntoView({behavior:calm?'auto':'smooth',block:'center'});v2.play().catch(()=>{});};
-$('#gift').onclick=()=>{a1.pause();a2.pause();sfx('open',.8);burst();go('s4');v1.play().catch(()=>{});};
+// the gift: one player. The five-years film runs, then the same player goes straight into the reel
+const v1=$('#v1'),FILMS=['light.mp4','gift.mp4'];let part=0;
+const film=i=>{part=i;v1.src=FILMS[i];v1.play().catch(()=>{});};
+v1.onended=()=>{if(part<FILMS.length-1)film(part+1);};
+$('#gift').onclick=()=>{a1.pause();a2.pause();sfx('open',.8);burst();go('s4');film(0);
+  const pre=document.createElement('video');pre.preload='auto';pre.muted=true;pre.src=FILMS[1];};
 </script>
 </body>
 </html>
