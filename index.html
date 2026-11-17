@@ -141,7 +141,7 @@ body.shake main{animation:shake .35s linear}
 <section class="screen" id="s4">
   <h2>اینم کادوی من، برای <em>پنج‌سالگی‌ات.</em></h2>
   <div class="frame"><video id="v1" src="light.mp4" poster="five.jpg" playsinline controls preload="metadata"></video></div>
-  <a class="glass" href="both.mp4" download="maral-five-years.mp4">دانلود</a>
+  <a class="glass" id="dl" href="light.mp4" download="maral-five-years.mp4">دانلود</a>
   <div class="from">از طرف امیر.</div>
 </section>
 </main>
@@ -196,7 +196,7 @@ function accept(){if(done)return;done=true;a2.pause();sfx('stamp',1);const s=$('
 
 // the gift: one player. The five-years film runs, then the same player goes straight into the reel
 const v1=$('#v1'),FILMS=['light.mp4','gift.mp4'];let part=0;
-const film=i=>{part=i;v1.src=FILMS[i];v1.play().catch(()=>{});};
+const film=i=>{part=i;v1.src=FILMS[i];$('#dl').href=FILMS[i];v1.play().catch(()=>{});};
 v1.onended=()=>{if(part<FILMS.length-1)film(part+1);};
 $('#gift').onclick=()=>{a1.pause();a2.pause();sfx('open',.8);burst();go('s4');film(0);
   const pre=document.createElement('video');pre.preload='auto';pre.muted=true;pre.src=FILMS[1];};
