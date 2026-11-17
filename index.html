@@ -178,7 +178,10 @@ $('#open').onclick=()=>{a1.pause();go('s2');stage($('#s2'),a2);};
 
 // «اعتراض دارم» is decoration: it never lets itself be pressed
 const no=$('#no'),arena=$('#arena'),quip=$('#quip');
-const lines=['اعتراض وارد نیست.','این دکمه دکوره.','نظر نخواستم. تأیید خواستم.','این تصمیم قبلاً گرفته شده.','رئیس این صفحه منم.','راه دیگه‌ای نیست.'];
+const lines=['اعتراض وارد نیست.','نظر نخواستم. تأیید خواستم.','این تصمیم قبلاً گرفته شده.','رئیس این صفحه منم.','راه دیگه‌ای نیست.'];
+// short sounds: the button slipping away, the stamp landing, the gift opening
+const SFX={whoosh:new Audio('whoosh.mp3'),stamp:new Audio('stamp.mp3'),open:new Audio('open.mp3')};
+const sfx=(k,v)=>{const a=SFX[k];a.volume=v;a.currentTime=0;a.play().catch(()=>{});};
 const EV=['pointerenter','pointerdown','touchstart','focus'];let n=0,done=false;
 const dodge=e=>{e&&e.preventDefault();if(done)return;
   if(n>=lines.length){no.textContent='قبول، تسلیمم';no.classList.remove('ghost');no.onclick=accept;no.style.left='50%';no.style.top='92px';no.style.transform='translateX(-50%)';
@@ -187,10 +190,10 @@ const dodge=e=>{e&&e.preventDefault();if(done)return;
   do{x=Math.random()*(a.width-b.width);t=Math.random()*(a.height-b.height);k++;}
   while(k<40&&Math.hypot(x-(b.left-a.left),t-(b.top-a.top))<110);
   no.style.left=x+'px';no.style.top=t+'px';no.style.transform=`rotate(${(Math.random()*16-8).toFixed(1)}deg) scale(${Math.max(.74,1-n*.045)})`;
-  quip.textContent=lines[n++];navigator.vibrate&&navigator.vibrate(18);};
+  quip.textContent=lines[n++];sfx('whoosh',.45);navigator.vibrate&&navigator.vibrate(18);};
 EV.forEach(k=>no.addEventListener(k,dodge,{passive:false}));
 no.onclick=e=>e.preventDefault();
-function accept(){if(done)return;done=true;a2.pause();const s=$('#stamp');s.classList.add('hit');navigator.vibrate&&navigator.vibrate([30,40,60]);
+function accept(){if(done)return;done=true;a2.pause();sfx('stamp',1);const s=$('#stamp');s.classList.add('hit');navigator.vibrate&&navigator.vibrate([30,40,60]);
   setTimeout(()=>{document.body.classList.add('shake');burst();},calm?0:270);
   setTimeout(()=>{s.classList.remove('hit');document.body.classList.remove('shake');go('s3');},calm?700:1350);}
 
@@ -198,7 +201,7 @@ function accept(){if(done)return;done=true;a2.pause();const s=$('#stamp');s.clas
 const v1=$('#v1'),v2=$('#v2');
 v1.onplay=()=>v2.pause();v2.onplay=()=>v1.pause();
 v1.onended=()=>{v2.scrollIntoView({behavior:calm?'auto':'smooth',block:'center'});v2.play().catch(()=>{});};
-$('#gift').onclick=()=>{a1.pause();a2.pause();burst();go('s4');v1.play().catch(()=>{});};
+$('#gift').onclick=()=>{a1.pause();a2.pause();sfx('open',.8);burst();go('s4');v1.play().catch(()=>{});};
 </script>
 </body>
 </html>
