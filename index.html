@@ -88,7 +88,8 @@ body.shake main{animation:shake .35s linear}
 .frame video{width:100%;height:100%;display:block;object-fit:cover}
 #s4 .from{color:var(--mute);font-size:15px}
 #s4 .row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:12px}
-#s4 .btn{font-size:15px;padding:12px 22px;min-height:48px}
+#s4 .btn{font-size:15px;padding:12px 16px;min-height:48px}
+#films .btn.on{background:var(--gold);color:#120d02;box-shadow:none}
 @media (prefers-reduced-motion:reduce){.stage{transition:opacity .3s;transform:none;filter:none}#hint{animation:none}#no{transition:none}.on .card{animation:none;clip-path:none}body.shake main{animation:none}#stamp.hit b{animation:none;transform:rotate(-9deg);opacity:1}}
 </style>
 </head>
@@ -134,11 +135,13 @@ body.shake main{animation:shake .35s linear}
 
 <section class="screen" id="s4">
   <h2>اینم کادوی من، برای <em>پنج‌سالگی‌ات.</em></h2>
-  <div class="frame"><video id="giftv" src="gift.mp4" poster="maral.jpg" playsinline controls preload="metadata"></video></div>
+  <div class="frame"><video id="giftv" src="light.mp4" poster="five.jpg" playsinline controls preload="metadata"></video></div>
   <div class="from">از طرف امیر.</div>
-  <div class="row">
-    <button class="btn ghost" id="other" hidden>فیلم دوم را ببین</button>
-    <a class="btn ghost" id="save" href="gift.mp4" download="five-years-of-smiles.mp4">ذخیره‌ی فیلم</a>
+  <div class="row" id="films">
+    <button class="btn ghost" data-f="light.mp4">نور</button>
+    <button class="btn ghost" data-f="gift.mp4">پنج سال</button>
+    <button class="btn ghost" data-f="luxe.mp4">طلایی</button>
+    <a class="btn ghost" id="save" href="light.mp4" download="five-years.mp4" aria-label="ذخیره‌ی فیلم">ذخیره</a>
   </div>
 </section>
 </main>
@@ -188,11 +191,12 @@ function accept(){if(done)return;done=true;a2.pause();const s=$('#stamp');s.clas
   setTimeout(()=>{document.body.classList.add('shake');burst();},calm?0:270);
   setTimeout(()=>{s.classList.remove('hit');document.body.classList.remove('shake');go('s3');},calm?700:1350);}
 
-// the gift
-const gv=$('#giftv');
-$('#gift').onclick=()=>{a1.pause();a2.pause();burst();go('s4');gv.play().catch(()=>{});};
-fetch('luxe.mp4',{method:'HEAD'}).then(r=>{if(!r.ok)return;const o=$('#other');o.hidden=false;let two=false;
-  o.onclick=()=>{two=!two;gv.src=two?'luxe.mp4':'gift.mp4';$('#save').href=gv.src;o.textContent=two?'فیلم اول را ببین':'فیلم دوم را ببین';gv.play().catch(()=>{});};}).catch(()=>{});
+// the gift: three films, one after another (light, the reel, the gold one)
+const gv=$('#giftv'),fb=[...document.querySelectorAll('#films button')];
+const show=f=>{gv.src=f;$('#save').href=f;fb.forEach(b=>b.classList.toggle('on',b.dataset.f===f));gv.play().catch(()=>{});};
+fb.forEach(b=>b.onclick=()=>show(b.dataset.f));
+gv.onended=()=>{const i=fb.findIndex(b=>b.classList.contains('on'));if(i>=0&&i<fb.length-1)show(fb[i+1].dataset.f);};
+$('#gift').onclick=()=>{a1.pause();a2.pause();burst();go('s4');show('light.mp4');};
 </script>
 </body>
 </html>
