@@ -38,9 +38,11 @@ em{font-style:normal;color:var(--gold)}
 
 /* 1 · the five */
 #s1{justify-content:flex-end;padding-bottom:max(44px,env(safe-area-inset-bottom))}
-#s1 video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 22%;z-index:-1;opacity:.96}
-#s1::after{content:"";position:absolute;inset:auto 0 0 0;height:56%;background:linear-gradient(180deg,transparent,rgba(7,7,8,.86) 46%,var(--bg) 78%);z-index:-1}
-#s1 h1{font-size:clamp(40px,12vw,64px)}
+#s1 video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 34%;z-index:-1;opacity:.96}
+#s1::after{content:"";position:absolute;inset:auto 0 0 0;height:66%;background:linear-gradient(180deg,transparent,rgba(7,7,8,.86) 46%,var(--bg) 78%);z-index:-1}
+#s1 h1{font-size:clamp(34px,10vw,52px);margin-bottom:10px}
+#s1 .say{font-size:19px;font-weight:700;color:var(--ink);margin:1px 0}
+#s1 .say.gold{color:var(--gold);font-size:22px;margin:6px 0 22px}
 #s1 p{color:var(--mute);font-size:16px;margin:8px 0 26px}
 #s1 .btn{min-width:210px}
 
@@ -54,7 +56,7 @@ em{font-style:normal;color:var(--gold)}
 
 /* 2 · not a question */
 #s2 .lead{font-size:17px;color:var(--mute);font-weight:700;margin-bottom:10px}
-#s2 h2{font-size:clamp(31px,9.4vw,52px);max-width:10em}
+#s2 h2{font-size:clamp(34px,10.4vw,56px);max-width:9.5em}
 #arena{position:relative;width:min(100%,420px);height:250px;margin-top:22px}
 #no{position:absolute;left:50%;top:92px;min-width:190px;font-size:18px;transform:translateX(-50%);transition:left .32s var(--ease),top .32s var(--ease),transform .32s var(--ease)}
 #quip{min-height:2em;color:var(--gold-hi);font-size:17px;font-weight:700;margin-top:4px}
@@ -99,16 +101,19 @@ body.shake main{animation:shake .35s linear}
 <main>
 <section class="screen on" id="s1">
   <video src="five.mp4" poster="five.jpg" muted autoplay loop playsinline aria-hidden="true"></video>
-  <h1><span class="stage" data-at="1.3" style="display:block">خانم دکتر فیضی.</span><span class="stage" data-at="3.15" style="display:block"><em>پنج سال</em> گذشت.</span></h1>
-  <p class="stage" data-at="4.7">این کارت تبریک برای شماست.</p>
-  <button class="btn stage" id="open" data-at="7.7" disabled>باز کنید</button>
-  <div id="hint">برای شروع، لمس کنید</div>
+  <h1 class="stage" data-at="1.3">دکتر مارال، سلام.</h1>
+  <p class="say stage" data-at="3.98">گفته بودی گل قبول نمی‌کنی.</p>
+  <p class="say stage" data-at="6.26">امشب بازم همه با گل اومدن.</p>
+  <p class="say stage" data-at="8.7">من حرف گوش کردم. گل نیاوردم.</p>
+  <p class="say gold stage" data-at="11.34">یه چیز بهتر آوردم.</p>
+  <button class="btn stage" id="open" data-at="13.3" disabled>ببینم</button>
+  <div id="hint">لمس کن</div>
 </section>
 
 <section class="screen" id="s2">
-  <div class="lead stage" data-at="0.25">تعارف نمی‌کنم. واقعیت را می‌گویم.</div>
-  <h2 class="stage" data-at="3.15">پنج سال در این کار ماندن، <em>کار هر کسی نیست.</em></h2>
-  <div id="arena" class="stage" data-at="7.4">
+  <div class="lead stage" data-at="0.3">سؤال نمی‌پرسم. اعلام می‌کنم:</div>
+  <h2 class="stage" data-at="3.05">خفن‌ترین دندون‌پزشک این شهر <em>تویی.</em></h2>
+  <div id="arena" class="stage" data-at="6.6">
     <button class="btn ghost" id="no">اعتراض دارم</button>
   </div>
   <div id="quip" aria-live="polite"></div>
@@ -118,19 +123,19 @@ body.shake main{animation:shake .35s linear}
   <div class="card">
     <h2><em>پنج سال.</em><br>هزاران لبخند.</h2>
     <div class="rule"></div>
-    <p>خانم دکتر فیضی؛ پنج سال پیش شروع کردید و <strong>یک قدم هم عقب نکشیدید.</strong> پنج سال دقت، نظم و کار درست. نتیجه‌اش را همه می‌بینند.</p>
+    <p>دکتر مارال؛ پنج سال پیش شروع کردی و <strong>یک قدم هم عقب نکشیدی.</strong> پنج سال دقت، نظم و کار درست. نتیجه‌اش را همه می‌بینند.</p>
     <p><strong>پنج‌سالگی کلینیک مبارک.</strong> مسیر ادامه دارد.</p>
     <div class="sign">امیر میرزایی</div>
-    <button class="btn" id="gift">هدیه را باز کنید</button>
+    <button class="btn" id="gift">کادوی من را باز کن</button>
   </div>
 </section>
 
 <section class="screen" id="s4">
-  <h2>هدیه‌ی من، به مناسبت <em>پنج سال.</em></h2>
+  <h2>اینم کادوی من، برای <em>پنج‌سالگی‌ات.</em></h2>
   <div class="frame"><video id="giftv" src="gift.mp4" poster="maral.jpg" playsinline controls preload="metadata"></video></div>
-  <div class="from">از طرف امیر میرزایی.</div>
+  <div class="from">از طرف امیر.</div>
   <div class="row">
-    <button class="btn ghost" id="other" hidden>فیلم دوم را ببینید</button>
+    <button class="btn ghost" id="other" hidden>فیلم دوم را ببین</button>
     <a class="btn ghost" id="save" href="gift.mp4" download="five-years-of-smiles.mp4">ذخیره‌ی فیلم</a>
   </div>
 </section>
@@ -165,11 +170,11 @@ $('#open').onclick=()=>{a1.pause();go('s2');stage($('#s2'),a2);};
 
 // «اعتراض دارم» is decoration: it never lets itself be pressed
 const no=$('#no'),arena=$('#arena'),quip=$('#quip');
-const lines=['اعتراض وارد نیست.','این دکمه دکور است.','نظر نخواستم.','تصمیم گرفته شده.','رئیس این صفحه منم.','راه دیگری نیست.'];
+const lines=['اعتراض وارد نیست.','این دکمه دکوره.','نظر نخواستم. تأیید خواستم.','این تصمیم قبلاً گرفته شده.','رئیس این صفحه منم.','راه دیگه‌ای نیست.'];
 const EV=['pointerenter','pointerdown','touchstart','focus'];let n=0,done=false;
 const dodge=e=>{e&&e.preventDefault();if(done)return;
-  if(n>=lines.length){no.textContent='قبول می‌کنم';no.classList.remove('ghost');no.onclick=accept;no.style.left='50%';no.style.top='92px';no.style.transform='translateX(-50%)';
-    quip.textContent='منطقی است.';EV.forEach(k=>no.removeEventListener(k,dodge));return;}
+  if(n>=lines.length){no.textContent='قبول، تسلیمم';no.classList.remove('ghost');no.onclick=accept;no.style.left='50%';no.style.top='92px';no.style.transform='translateX(-50%)';
+    quip.textContent='بالاخره.';EV.forEach(k=>no.removeEventListener(k,dodge));return;}
   const a=arena.getBoundingClientRect(),b=no.getBoundingClientRect();let x,t,k=0;
   do{x=Math.random()*(a.width-b.width);t=Math.random()*(a.height-b.height);k++;}
   while(k<40&&Math.hypot(x-(b.left-a.left),t-(b.top-a.top))<110);
@@ -185,7 +190,7 @@ function accept(){if(done)return;done=true;a2.pause();const s=$('#stamp');s.clas
 const gv=$('#giftv');
 $('#gift').onclick=()=>{a1.pause();a2.pause();burst();go('s4');gv.play().catch(()=>{});};
 fetch('luxe.mp4',{method:'HEAD'}).then(r=>{if(!r.ok)return;const o=$('#other');o.hidden=false;let two=false;
-  o.onclick=()=>{two=!two;gv.src=two?'luxe.mp4':'gift.mp4';$('#save').href=gv.src;o.textContent=two?'فیلم اول را ببینید':'فیلم دوم را ببینید';gv.play().catch(()=>{});};}).catch(()=>{});
+  o.onclick=()=>{two=!two;gv.src=two?'luxe.mp4':'gift.mp4';$('#save').href=gv.src;o.textContent=two?'فیلم اول را ببین':'فیلم دوم را ببین';gv.play().catch(()=>{});};}).catch(()=>{});
 </script>
 </body>
 </html>
